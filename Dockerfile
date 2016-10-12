@@ -14,8 +14,8 @@ RUN apt-get -qq update && \
 	
 # install nexus
 RUN mkdir -p /opt/sonatype/nexus && \
-	wget https://www.sonatype.com/oss-thank-you-tar.gz -P /tmp && \
-	cd /opt/sonatype/nexus && tar xzvf /tmp/oss-thank-you-tar.gz
+	wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz -P /tmp && \
+	cd /opt/sonatype/nexus && tar xzvf /tmp/latest-unix.tar.gz
 RUN chown -R root:root /opt/sonatype/nexus
 
   
