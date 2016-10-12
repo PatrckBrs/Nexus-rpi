@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:wheezy
+FROM resin/rpi-raspbian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV SONATYPE_WORK /opt/sonatype-work
