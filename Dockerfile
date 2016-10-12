@@ -13,9 +13,9 @@ RUN apt-get -qq update && \
 	apt-get clean
 	
 # install nexus
-RUN mkdir -p /opt/sonatype/nexus && \
+RUN mkdir -p /opt/sonatype/ && \
 	wget http://download.sonatype.com/nexus/3/latest-unix.tar.gz -P /tmp && \
-	cd /opt/sonatype/nexus && tar xzvf /tmp/latest-unix.tar.gz
+	cd /opt/sonatype && tar xzvf /tmp/latest-unix.tar.gz && ln -s nexus-3.0.2-02 nexus
 RUN chown -R root:root /opt/sonatype/nexus
 
   
