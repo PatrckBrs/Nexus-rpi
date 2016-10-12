@@ -4,9 +4,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ENV NEXUS_DATA /nexus-data
 
-RUN apt-get update && \
-	apt-get -y upgrade && \
-	apt-get -y install --no-install-recommends \
+RUN apt-get -qq update && \
+	apt-get -qqy upgrade && \
+	apt-get -qqy install --no-install-recommends \
 	curl \
 	wget \
 	openjdk-8-jre-headless && \
