@@ -13,10 +13,10 @@ RUN apt-get -qq update && \
 	
 # install nexus
 RUN mkdir -p /opt/sonatype/nexus && \
-	wget https://download.sonatype.com/nexus/3/nexus-latest-bundle.tar.gz -P /tmp && \
-  	chown -R root:root /opt/sonatype/nexus && \
-  	cd /opt/sonatype/nexus && \
-	tar xzvf /tmp/nexus-latest-bundle.tar.gz
+	wget https://www.sonatype.com/oss-thank-you-tar.gz -P /tmp && \
+	cd /opt/sonatype/nexus && tar xzvf /tmp/oss-thank-you-tar.gz
+RUN chown -R root:root /opt/sonatype/nexus
+
   
 ## configure nexus runtime env
 RUN sed \
