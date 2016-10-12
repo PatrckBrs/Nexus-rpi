@@ -3,7 +3,7 @@ FROM resin/rpi-raspbian:jessie
 ENV DEBIAN_FRONTEND noninteractive
 
 ENV NEXUS_DATA /nexus-data
-ENV NEXUS_VERSION latest
+ENV NEXUS_VERSION latest-bundle
 
 RUN apt-get update && \
 	apt-get -y upgrade && \
@@ -15,7 +15,7 @@ RUN apt-get update && \
 	
 # install nexus
 RUN mkdir -p /opt/sonatype/nexus && \
-	curl --fail --silent --location --retry 3 https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-bundle.tar.gz \
+	curl --fail --silent --location --retry 3 https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}.tar.gz \
   | gunzip \
   | tar x -C /opt/sonatype/nexus --strip-components=1 nexus-${NEXUS_VERSION} && \
   chown -R root:root /opt/sonatype/nexus 
