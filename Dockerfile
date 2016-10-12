@@ -7,17 +7,16 @@ ENV NEXUS_DATA /nexus-data
 RUN apt-get -qq update && \
 	apt-get -qqy upgrade && \
 	apt-get -qqy install --no-install-recommends \
-	curl \
 	wget \
 	openjdk-8-jre-headless && \
 	apt-get clean
 	
 # install nexus
 RUN mkdir -p /opt/sonatype/nexus && \
-	curl --fail --silent --location --retry 3 https://download.sonatype.com/nexus/3/nexus-latest-bundle.tar.gz \
-  | gunzip \
-  | tar x -C /opt/sonatype/nexus --strip-components=1 nexus-latest-bundle && \
-  chown -R root:root /opt/sonatype/nexus 
+	wget https://download.sonatype.com/nexus/3/nexus-latest-bundle.tar.gz -P /tmp && \
+  	chown -R root:root /opt/sonatype/nexus && \
+  	cd /opt/sonatype/nexus && \
+	tar xzvf /tmp/nexus-latest-bundle.tar.gz
   
 ## configure nexus runtime env
 RUN sed \
