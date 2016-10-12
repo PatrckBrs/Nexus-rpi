@@ -1,36 +1,45 @@
 FROM resin/rpi-raspbian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
-ENV SONATYPE_WORK /opt/sonatype-work
+
+ENV NEXUS_DATA /nexus-data
+ENV NEXUS_VERSION latest
 
 RUN apt-get update && \
 	apt-get -y upgrade && \
 	apt-get -y install --no-install-recommends \
+	curl \
 	wget \
 	openjdk-8-jre-headless && \
 	apt-get clean
+	
+# install nexus
+RUN mkdir -p /opt/sonatype/nexus && \
+	curl --fail --silent --location --retry 3 https://download.sonatype.com/nexus/3/nexus-${NEXUS_VERSION}-bundle.tar.gz \
+  | gunzip \
+  | tar x -C /opt/sonatype/nexus --strip-components=1 nexus-${NEXUS_VERSION} && \
+  chown -R root:root /opt/sonatype/nexus 
+  
+## configure nexus runtime env
+RUN sed \
+    -e "s|karaf.home=.|karaf.home=/opt/sonatype/nexus|g" \
+    -e "s|karaf.base=.|karaf.base=/opt/sonatype/nexus|g" \
+    -e "s|karaf.etc=etc|karaf.etc=/opt/sonatype/nexus/etc|g" \
+    -e "s|java.util.logging.config.file=etc|java.util.logging.config.file=/opt/sonatype/nexus/etc|g" \
+    -e "s|karaf.data=data|karaf.data=${NEXUS_DATA}|g" \
+    -e "s|java.io.tmpdir=data/tmp|java.io.tmpdir=${NEXUS_DATA}/tmp|g" \
+    -i /opt/sonatype/nexus/bin/nexus.vmoptions
 
-RUN mkdir -p /opt/sonatype/nexus && mkdir -p /opt/sonatype-work && \ 
-	wget http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz -P /tmp/
+RUN useradd -r -u 200 -m -c "nexus role account" -d ${NEXUS_DATA} -s /bin/false nexus
 
-RUN tar xzvf /tmp/nexus*.tar.gz -C /opt/sonatype/nexus && rm /tmp/nexus*.tar.gz
-
-RUN /usr/sbin/useradd --create-home --home-dir /home/nexus --shell /bin/bash nexus
+VOLUME ${NEXUS_DATA}
 
 EXPOSE 8081
-
-VOLUME  ["/opt/sonatype-work"]
-
-WORKDIR /opt/sonatype/nexus
 USER nexus
-ENV CONTEXT_PATH /
-ENV MAX_HEAP 768m
-ENV MIN_HEAP 256m
-ENV JAVA_OPTS -server -XX:MaxMetaspaceSize=192m -Djava.net.preferIPv4Stack=true
-ENV LAUNCHER_CONF ./conf/jetty.xml ./conf/jetty-requestlog.xml
-CMD java \
-  -Dnexus-work=${SONATYPE_WORK} -Dnexus-webapp-context-path=${CONTEXT_PATH} \
-  -Xms${MIN_HEAP} -Xmx${MAX_HEAP} \
-  -cp 'conf/:lib/*' \
-  ${JAVA_OPTS} \
-  org.sonatype.nexus.bootstrap.Launcher ${LAUNCHER_CONF}
+WORKDIR /opt/sonatype/nexus
+
+ENV JAVA_MAX_MEM 512m
+ENV JAVA_MIN_MEM 512m
+ENV EXTRA_JAVA_OPTS ""
+
+CMD ["bin/nexus", "run"]
