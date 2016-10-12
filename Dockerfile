@@ -8,6 +8,7 @@ RUN apt-get -qq update && \
 	apt-get -qqy upgrade && \
 	apt-get -qqy install --no-install-recommends \
 	wget \
+	gunzip \
 	openjdk-8-jre-headless && \
 	apt-get clean
 	
