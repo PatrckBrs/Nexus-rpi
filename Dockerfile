@@ -9,6 +9,7 @@ RUN apt-get -qq update && \
     supervisor \
     procps \
     sudo \
+    wget \
     ca-certificates \
     openjdk-7-jre-headless \
     openjdk-8-jre-headless && \
