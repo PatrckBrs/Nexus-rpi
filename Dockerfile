@@ -2,9 +2,19 @@ FROM resin/rpi-raspbian:jessie
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV SONATYPE_WORK /opt/sonatype-work
-RUN apt-get -qq update && apt-get -qqy upgrade && apt-get -qqy install --no-install-recommends bash supervisor procps sudo ca-certificates openjdk-7-jre-headless && apt-get clean
+RUN apt-get -qq update && \
+    apt-get -qqy upgrade && \
+    apt-get -qqy install --no-install-recommends \
+    bash \
+    supervisor \
+    procps \
+    sudo \
+    ca-certificates \
+    openjdk-7-jre-headless && \
+    apt-get clean
 
-ADD http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz /tmp/nexus.tar
+#ADD http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz /tmp/nexus.tar
+ADD http://download.sonatype.com/nexus/3/latest-unix.tar.gz /tmp/nexus.tar
 RUN tar xfv /tmp/nexus.tar -C /opt && rm /tmp/nexus.tar
 RUN /usr/sbin/useradd --create-home --home-dir /home/nexus --shell /bin/bash nexus
 RUN ln -s `find /opt -maxdepth 1 -type d -iname "nexus-*"` /opt/nexus
