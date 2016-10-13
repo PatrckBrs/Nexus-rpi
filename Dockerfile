@@ -13,8 +13,8 @@ RUN apt-get -qq update && \
     openjdk-7-jre-headless && \
     apt-get clean
 
-#ADD http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz /tmp/nexus.tar
-ADD http://download.sonatype.com/nexus/3/latest-unix.tar.gz /tmp/nexus.tar
+ADD http://www.sonatype.org/downloads/nexus-latest-bundle.tar.gz /tmp/nexus.tar
+#ADD http://download.sonatype.com/nexus/3/latest-unix.tar.gz /tmp/nexus.tar
 RUN tar xfv /tmp/nexus.tar -C /opt && rm /tmp/nexus.tar
 RUN /usr/sbin/useradd --create-home --home-dir /home/nexus --shell /bin/bash nexus
 RUN ln -s `find /opt -maxdepth 1 -type d -iname "nexus-*"` /opt/nexus
