@@ -14,15 +14,15 @@ RUN apt-get -qq update && \
     openjdk-8-jre-headless && \
     apt-get clean
 
-RUN wget https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.0.1-01-unix.tar.gz -O /tmp/nexus-3.0.1-01-unix.tar.gz && \
+RUN wget https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-3.0.2-02-unix.tar.gz -O /tmp/nexus-3.0.2-02-unix.tar.gz && \
         useradd -r -u 200 -m -c "nexus role account" -d /opt/sonatype-work -s /bin/false nexus && \
         mkdir -p /opt/sonatype/ && \
         mkdir -p /opt/sonatype-work && \
-        tar -C /opt/sonatype/ -xvaf /tmp/nexus-3.0.1-01-unix.tar.gz && \
-        ln -s /opt/sonatype/nexus-3.0.1-01/ /opt/sonatype/nexus && \
-        rm -f /tmp/nexus-3.0.1-01-unix.tar.gz && \
+        tar -C /opt/sonatype/ -xvaf /tmp/nexus-3.0.2-02-unix.tar.gz && \
+        ln -s /opt/sonatype/nexus-3.0.2-02/ /opt/sonatype/nexus && \
+        rm -f /tmp/nexus-3.0.2-02-unix.tar.gz && \
         chown -Rv nexus:nexus /opt/sonatype/nexus && \
-        chown -Rv nexus:nexus /opt/sonatype/nexus-3.0.1-01 && \
+        chown -Rv nexus:nexus /opt/sonatype/nexus-3.0.2-02 && \
         chown -Rv nexus:nexus /opt/sonatype-work
 
 VOLUME /opt/sonatype-work
