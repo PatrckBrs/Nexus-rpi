@@ -19,7 +19,7 @@ RUN tar xfv /tmp/nexus.tar -C /opt && rm /tmp/nexus.tar
 RUN /usr/sbin/useradd --create-home --home-dir /home/nexus --shell /bin/bash nexus
 RUN ln -s `find /opt -maxdepth 1 -type d -iname "nexus-*"` /opt/nexus
 
-RUN chown -R nexus.nexus /opt/sonatype-work `find /opt -maxdepth 1 -type d -iname "nexus-*"`
+RUN mkdir -p /opt/sonatype-work && chown -R nexus.nexus /opt/sonatype-work `find /opt -maxdepth 1 -type d -iname "nexus-*"`
 
 EXPOSE 8081
 
